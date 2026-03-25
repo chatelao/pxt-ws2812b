@@ -20,17 +20,8 @@ namespace ws2812b {
     /**
      * Sends a color buffer to a light strip
      */
-    //% blockId="ws2812b_send_buffer" block="send buffer %buf on pin %pin" weight=90
     //% shim=light::sendWS2812Buffer
     export function sendWS2812Buffer(buf: Buffer, pin: number) {
-    }
-
-    //% shim=light::setMode
-    export function setWS2812Mode(pin: number, mode: number) {
-    }
-
-    //% shim=light::sendBuffer
-    export function sendBufferOther(pin: number, clk: number, mode: number, buf: Buffer) {
     }
 
     /**
@@ -38,12 +29,7 @@ namespace ws2812b {
      */
     //% blockId="ws2812b_send_buffer" block="send buffer %buf on pin %pin" weight=90
     export function sendBuffer(buf: Buffer, pin: number) {
-        const l: any = light;
-        if (l && l.sendWS2812Buffer) {
-            sendWS2812Buffer(buf, pin);
-        } else {
-            sendBufferOther(pin, 0, _mode, buf);
-        }
+        sendWS2812Buffer(buf, pin);
     }
 
     /**
@@ -52,10 +38,6 @@ namespace ws2812b {
     //% blockId="ws2812b_set_buffer_mode" block="set buffer mode on pin %pin to %mode" weight=80
     export function setBufferMode(pin: number, mode: number) {
         _mode = mode;
-        const l: any = light;
-        if (l && l.setMode) {
-            setWS2812Mode(pin, mode);
-        }
     }
 
 
