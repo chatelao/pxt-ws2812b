@@ -4,8 +4,7 @@
     "description": "A driver for WS2812B programmable LEDs in MakeCode",
     "license": "MIT",
     "dependencies": {
-        "core": "*",
-        "microphone": "*"
+        "core": "*"
     },
     "files": [
         "README.md",
@@ -28,5 +27,6 @@
                 }
             }
         }
-    }
+    },
+    "binaryonly": true
 }

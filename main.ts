@@ -25,6 +25,7 @@ namespace ws2812b {
     export function sendBuffer(buf: Buffer, pin: number) {
     }
 
+    //% shim=light::setMode
     /**
      * Sets the buffer mode
      */
