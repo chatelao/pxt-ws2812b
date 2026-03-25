@@ -1,12 +1,12 @@
 namespace ws2812b {
-    //% shim=sendBufferAsm
+    //% shim=light::sendWS2812Buffer
     /**
      * Sends a color buffer to a light strip
      */
     export function sendBuffer(buf: Buffer, pin: number) {
     }
 
-    //% shim=setBufferMode
+    //% shim=light::setMode
     /**
      * Sets the buffer mode
      */
