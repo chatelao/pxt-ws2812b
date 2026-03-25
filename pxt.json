@@ -17,7 +17,8 @@
     ],
     "public": true,
     "supportedTargets": [
-        "microbit"
+        "microbit",
+        "rp2040"
     ],
     "preferredEditor": "tsprj",
     "yotta": {
