@@ -4,13 +4,12 @@
     "description": "A driver for WS2812B programmable LEDs in MakeCode",
     "license": "MIT",
     "dependencies": {
-        "core": "*"
+        "core": "*",
+        "microphone": "*"
     },
     "files": [
         "README.md",
-        "main.ts",
-        "sendBuffer.asm",
-        "setBufferMode.asm"
+        "main.ts"
     ],
     "testFiles": [
         "test.ts"
@@ -29,6 +28,5 @@
                 }
             }
         }
-    },
-    "binaryonly": true
+    }
 }

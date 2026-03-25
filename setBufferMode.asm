@@ -1,2 +1,0 @@
-setBufferMode:
-    bx lr
