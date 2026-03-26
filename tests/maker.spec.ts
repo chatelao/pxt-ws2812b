@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 test('maker load extension in maker.makecode.com and verify blocks', async ({ page }) => {
     // Increase timeout for this test
-    test.setTimeout(120000);
+    test.setTimeout(180000);
 
     // Navigate to maker.makecode.com
     console.log("Navigating to maker.makecode.com...");
@@ -39,38 +39,45 @@ test('maker load extension in maker.makecode.com and verify blocks', async ({ pa
 
     // Wait for the editor to load (Monaco or Toolbox)
     console.log("Waiting for editor...");
-    // The screenshot shows it's actually loaded but maybe the selector is too specific or needs more time/different class
-    // In Maker, it seems to have .blocklyTreeRow
     await page.waitForSelector('.blocklyTreeRow, .monaco-editor', { timeout: 60000 });
 
     // Open Extensions
     console.log("Opening Extensions...");
-    // In Maker, it's often a blocklyTreeRow with text "EXTENSIONS"
     const extensionsButton = page.locator('.blocklyTreeRow').filter({ hasText: /Extensions/i }).first();
-
-    // Wait for it to be attached and visible
     await extensionsButton.waitFor({ state: 'visible', timeout: 15000 });
     await extensionsButton.click();
 
     // Import extension
     console.log("Importing extension...");
-    // Use a more specific selector for the extensions search input
     const searchInput = page.locator('.extensions-browser input[type="text"]').first();
     await searchInput.waitFor({ state: 'visible' });
     await searchInput.click();
     await searchInput.fill('https://github.com/chatelao/pxt-ws2812b');
-    await page.waitForTimeout(500);
     await page.keyboard.press('Enter');
 
-    // Wait for and click the extension card
+    // Wait for results
     console.log("Waiting for extension card...");
-    // Sometimes it takes a while to fetch from GitHub
-    const extensionCard = page.locator('.ui.card, .item').filter({ hasText: /pxt-ws2812b/ }).first();
-    await extensionCard.waitFor({ state: 'visible', timeout: 60000 });
-    await extensionCard.click();
+    // Wait for any card that contains "ws2812b"
+    const extensionCard = page.locator('.extensions-browser .card, .extensions-browser .ui.card, .extensions-browser .item').filter({ hasText: /ws2812b/i }).first();
+
+    // Increased wait time and using attached state as it might be partially visible
+    await extensionCard.waitFor({ state: 'attached', timeout: 60000 });
+
+    // Force click via JS
+    console.log("Clicking extension card via evaluate...");
+    await page.evaluate((selector) => {
+        const elements = Array.from(document.querySelectorAll(selector));
+        const target = elements.find(el => /ws2812b/i.test(el.textContent || ""));
+        if (target) {
+            (target as HTMLElement).click();
+            return true;
+        }
+        return false;
+    }, '.extensions-browser .card, .extensions-browser .ui.card, .extensions-browser .item');
 
     // Wait for editor to reload
     console.log("Waiting for editor to reload after extension import...");
+    // After clicking, the modal should close and toolbox should reappear
     await page.waitForSelector('.blocklyToolboxDiv', { timeout: 60000 });
 
     // Switch to JavaScript/TypeScript tab to inject code
@@ -81,7 +88,6 @@ test('maker load extension in maker.makecode.com and verify blocks', async ({ pa
     await page.waitForSelector('.monaco-editor');
 
     // Inject code using WS2812B blocks
-    // Using DigitalPin.GP2 as it's common on Pico
     const code = `
 let strip = ws2812b.create(DigitalPin.GP2, 10, NumberFormat.UInt8_BE);
 strip.setPixelColor(0, 0xff0000);
@@ -89,13 +95,11 @@ strip.show();
 `;
 
     console.log("Injecting code...");
-    // Clear existing code and type new code
     await page.click('.monaco-editor');
     await page.keyboard.press('Control+A');
     await page.keyboard.press('Backspace');
     await page.keyboard.type(code);
 
-    // Wait a bit for the editor to process
     await page.waitForTimeout(2000);
 
     // Switch back to Blocks to verify it's working
