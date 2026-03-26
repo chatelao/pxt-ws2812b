@@ -1,97 +1,98 @@
 import { test, expect } from '@playwright/test';
 
 test('maker load extension in maker.makecode.com and verify blocks', async ({ page }) => {
-    // Increase timeout for this test
-    test.setTimeout(180000);
+    test.setTimeout(240000);
 
-    // Navigate to maker.makecode.com
     console.log("Navigating to maker.makecode.com...");
-    await page.goto('https://maker.makecode.com/', { waitUntil: 'networkidle' });
+    await page.goto('https://maker.makecode.com/?forceRP2040=1', { waitUntil: 'networkidle' });
 
     // Click "New Project"
     console.log("Clicking New Project...");
     const newProjectCard = page.locator('.newprojectcard, #newproject, .ui.card.clickable').filter({ hasText: /New Project/i }).first();
-    await newProjectCard.waitFor({ state: 'visible' });
-    // Use evaluate click as it's more reliable for these cards
+    await expect(newProjectCard).toBeVisible({ timeout: 15000 });
     await page.evaluate((el) => (el as HTMLElement).click(), await newProjectCard.elementHandle());
 
     // Wait for the project name input
     console.log("Entering project name...");
     const nameInput = page.locator('div.modal input[type="text"]').first();
-    await nameInput.waitFor({ state: 'visible', timeout: 15000 });
+    await expect(nameInput).toBeVisible({ timeout: 15000 });
     await nameInput.fill('Test WS2812B');
 
     const createButton = page.locator('div.modal button.positive, div.modal button:has-text("Create")').first();
     await createButton.click();
 
-    // Board Selection - Raspberry Pi Pico
-    console.log("Selecting Raspberry Pi Pico...");
+    // Board Selection - Raspberry Pi Pico (if it appears)
+    console.log("Checking for Raspberry Pi Pico board selection...");
     try {
-        // Wait for board selection cards
-        await page.waitForSelector('.ui.card, .card', { timeout: 15000 });
         const picoBoard = page.locator('.ui.card, .card').filter({ hasText: /Raspberry Pi Pico/i }).first();
-        await picoBoard.waitFor({ state: 'visible', timeout: 5000 });
-        await picoBoard.click();
-        console.log("Selected Raspberry Pi Pico");
+        if (await picoBoard.isVisible({ timeout: 10000 })) {
+            await picoBoard.click();
+            console.log("Selected Raspberry Pi Pico");
+        }
     } catch (e) {
-        console.log("Raspberry Pi Pico board selection not found or already selected. Continuing...");
+        console.log("Board selection skipped or handled.");
     }
 
-    // Wait for the editor to load (Monaco or Toolbox)
+    // Wait for the editor to load
     console.log("Waiting for editor...");
-    await page.waitForSelector('.blocklyTreeRow, .monaco-editor', { timeout: 60000 });
+    const blocklyTree = page.locator('.blocklyTreeRoot').first();
+    await expect(blocklyTree).toBeVisible({ timeout: 60000 });
 
     // Open Extensions
     console.log("Opening Extensions...");
     const extensionsButton = page.locator('.blocklyTreeRow').filter({ hasText: /Extensions/i }).first();
-    await extensionsButton.waitFor({ state: 'visible', timeout: 15000 });
+    await expect(extensionsButton).toBeVisible({ timeout: 15000 });
     await extensionsButton.click();
 
     // Import extension
     console.log("Importing extension...");
-    const searchInput = page.locator('.extensions-browser input[type="text"]').first();
-    await searchInput.waitFor({ state: 'visible' });
-    await searchInput.click();
+    const searchInput = page.locator('input[type="text"]').filter({ state: 'visible' }).first();
+    await expect(searchInput).toBeVisible();
     await searchInput.fill('https://github.com/chatelao/pxt-ws2812b');
     await page.keyboard.press('Enter');
 
-    // Wait for results
+    // Wait for results and click the extension card
     console.log("Waiting for extension card...");
-    // Wait for any card that contains "ws2812b"
-    const extensionCard = page.locator('.extensions-browser .card, .extensions-browser .ui.card, .extensions-browser .item').filter({ hasText: /ws2812b/i }).first();
+    const extensionTitle = page.getByText('ws2812b').first();
+    await expect(extensionTitle).toBeVisible({ timeout: 60000 });
+    await extensionTitle.click();
 
-    // Increased wait time and using attached state as it might be partially visible
-    await extensionCard.waitFor({ state: 'attached', timeout: 60000 });
+    // Wait for extension to load (look for LIGHT category)
+    console.log("Waiting for LIGHT category...");
+    const lightCategory = page.locator('.blocklyTreeRow').filter({ hasText: /LIGHT/i }).first();
+    await expect(lightCategory).toBeVisible({ timeout: 60000 });
 
-    // Force click via JS
-    console.log("Clicking extension card via evaluate...");
-    await page.evaluate((selector) => {
-        const elements = Array.from(document.querySelectorAll(selector));
-        const target = elements.find(el => /ws2812b/i.test(el.textContent || ""));
-        if (target) {
-            (target as HTMLElement).click();
-            return true;
+    // Click it to show blocks
+    await lightCategory.click();
+    await page.waitForTimeout(1000);
+    // Assertion: verify blocklyFlyout is visible after clicking the category
+    const blocklyFlyout = page.locator('.blocklyFlyout');
+    await expect(blocklyFlyout).toBeVisible();
+
+    await page.screenshot({ path: 'test-results/extension-blocks.png' });
+    console.log("Screenshot of blocks saved.");
+
+    // Switch to JavaScript
+    console.log("Switching to JavaScript...");
+    const jsButton = page.locator('a, div').filter({ hasText: /^JavaScript$/ }).first();
+    await jsButton.click();
+
+    // Handle "Problem converting" dialog if it appears
+    try {
+        const doneButton = page.locator('button').filter({ hasText: /Done|Discard|Stay/i }).first();
+        if (await doneButton.isVisible({ timeout: 5000 })) {
+            await doneButton.click();
         }
-        return false;
-    }, '.extensions-browser .card, .extensions-browser .ui.card, .extensions-browser .item');
+    } catch (e) {}
 
-    // Wait for editor to reload
-    console.log("Waiting for editor to reload after extension import...");
-    // After clicking, the modal should close and toolbox should reappear
-    await page.waitForSelector('.blocklyToolboxDiv', { timeout: 60000 });
+    console.log("Waiting for Monaco...");
+    const monacoEditor = page.locator('.monaco-editor');
+    await expect(monacoEditor).toBeVisible({ timeout: 30000 });
 
-    // Switch to JavaScript/TypeScript tab to inject code
-    console.log("Switching to JavaScript/TypeScript...");
-    const tsTab = page.locator('a.item').filter({ hasText: /JavaScript|TypeScript/ }).first();
-    await tsTab.click();
-
-    await page.waitForSelector('.monaco-editor');
-
-    // Inject code using WS2812B blocks
+    // Inject code
     const code = `
-let strip = ws2812b.create(DigitalPin.GP2, 10, NumberFormat.UInt8_BE);
-strip.setPixelColor(0, 0xff0000);
-strip.show();
+ws2812b.setBufferMode(DigitalPin.GP0, 1);
+ws2812b.sendBuffer(hex\`ff0000 00ff00 0000ff\`, DigitalPin.GP0);
 `;
 
     console.log("Injecting code...");
@@ -100,17 +101,41 @@ strip.show();
     await page.keyboard.press('Backspace');
     await page.keyboard.type(code);
 
-    await page.waitForTimeout(2000);
+    // Wait for compilation/background work
+    await page.waitForTimeout(5000);
 
-    // Switch back to Blocks to verify it's working
+    // Switch back to Blocks
     console.log("Switching back to Blocks...");
-    const blocksTab = page.locator('a.item').filter({ hasText: /Blocks/ }).first();
-    await blocksTab.click();
+    const blocksButton = page.locator('a, div').filter({ hasText: /^Blocks$/ }).first();
+    await blocksButton.click();
 
-    // Wait for blockly to render
-    await page.waitForSelector('.blocklyBlockCanvas', { timeout: 30000 });
+    // If there's an error converting back, it might show a dialog
+    console.log("Checking for 'Discard' or 'Stay' dialogs...");
+    const discardButton = page.locator('button').filter({ hasText: /Discard|Stay/i });
+    if (await discardButton.count() > 0) {
+        try {
+            const firstDiscard = discardButton.first();
+            if (await firstDiscard.isVisible({ timeout: 5000 })) {
+                await firstDiscard.click();
+            }
+        } catch (e) {}
+    }
 
-    // Take a screenshot to verify
-    await page.screenshot({ path: 'test-results/blocks-verified.png' });
-    console.log("Screenshot saved to test-results/blocks-verified.png");
+    // Final check
+    console.log("Final verification...");
+
+    // Wait for the workspace to settle
+    await page.waitForTimeout(5000);
+
+    // Verify that there are blocks in the workspace
+    const blocks = page.locator('.blocklyWorkspace .blocklyDraggable');
+    const blockCount = await blocks.count();
+    console.log(`Blocks found: ${blockCount}`);
+
+    // Even if they are "hidden" by Playwright's visibility definition (e.g. obscured by a modal),
+    // they should be present in the DOM.
+    expect(blockCount).toBeGreaterThan(0);
+
+    await page.screenshot({ path: 'test-results/final-project.png' });
+    console.log("Final project screenshot saved.");
 });

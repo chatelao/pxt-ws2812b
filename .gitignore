@@ -5,3 +5,7 @@ yotta_targets
 pxt_modules
 *.db
 *.tgz
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
