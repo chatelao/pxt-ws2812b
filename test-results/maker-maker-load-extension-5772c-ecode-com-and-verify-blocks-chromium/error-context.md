@@ -1,0 +1,365 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e1]:
+  - generic [ref=e5]:
+    - menubar [ref=e6]:
+      - menuitem [ref=e7]:
+        - generic [ref=e8]: 
+        - generic [ref=e9]: Enable blocks keyboard controls
+      - menuitem [ref=e10]:
+        - generic [ref=e11]: 
+        - generic [ref=e12]: Skip to JavaScript editor
+      - menuitem [ref=e13]:
+        - generic [ref=e14]: 
+        - generic [ref=e15]: Skip to Python editor
+      - menuitem [ref=e16]:
+        - generic [ref=e17]: 
+        - generic [ref=e18]: Go Home
+    - menubar [ref=e19]:
+      - generic [ref=e20]:
+        - img
+        - menuitem [ref=e21] [cursor=pointer]:
+          - img [ref=e22]
+      - menuitem [ref=e24]:
+        - listbox [ref=e25]:
+          - option [selected] [ref=e26]:
+            - generic [ref=e27]: 
+            - generic [ref=e28]: Blocks
+          - option [ref=e29]:
+            - generic [ref=e30]: 
+            - generic [ref=e31]: JavaScript
+          - option [ref=e32] [cursor=pointer]:
+            - generic [ref=e33]: 
+            - text:  
+      - generic [ref=e35]:
+        - menuitem [ref=e36]:
+          - generic [ref=e37]: 
+        - menuitem [ref=e38]:
+          - generic [ref=e39]: 
+        - menuitem [ref=e41] [cursor=pointer]:
+          - generic [ref=e43]: 
+        - menuitem [ref=e45] [cursor=pointer]:
+          - generic [ref=e47]: 
+    - generic [ref=e51]:
+      - region [ref=e52]:
+        - iframe [ref=e55]:
+          - img [ref=f1e2]:
+            - generic [ref=f1e3]:
+              - generic "A0" [ref=f1e5]
+              - generic "A1" [ref=f1e6]
+              - generic "A2" [ref=f1e7]
+              - generic "A3" [ref=f1e8]
+              - generic "A4" [ref=f1e9]
+              - generic "A5" [ref=f1e10]
+              - generic "SCL" [ref=f1e11]
+              - generic "SDA" [ref=f1e12]
+              - generic "GND1" [ref=f1e13]
+              - generic "D13" [ref=f1e14]
+              - generic "D12" [ref=f1e15]
+              - generic "D11" [ref=f1e16]
+              - generic "D10" [ref=f1e17]
+              - generic "D9" [ref=f1e18]
+              - generic "D8" [ref=f1e19]
+              - generic "D7" [ref=f1e20]
+              - generic "D6" [ref=f1e21]
+              - generic "D5" [ref=f1e22]
+              - generic "D4" [ref=f1e23]
+              - generic "D3" [ref=f1e24]
+              - generic "D2" [ref=f1e25]
+              - generic "D1" [ref=f1e26]
+              - generic "D0" [ref=f1e27]
+              - generic "3V3" [ref=f1e28]
+              - generic "5V" [ref=f1e29]
+              - generic "GND" [ref=f1e30]
+              - generic "GND2" [ref=f1e31]
+              - generic "VIN" [ref=f1e32]
+              - generic "GNDSPI" [ref=f1e33]
+              - generic "SCK" [ref=f1e34]
+              - generic "MOSI" [ref=f1e35]
+              - generic "MISO" [ref=f1e36]
+              - generic "VCC" [ref=f1e37]
+            - generic "NEOPIXEL" [ref=f1e41]
+            - generic "RESET" [ref=f1e42]
+      - complementary [ref=e56]:
+        - generic [ref=e57]:
+          - button [ref=e58] [cursor=pointer]:
+            - generic [ref=e59]: 
+          - text: 
+          - button [ref=e60] [cursor=pointer]:
+            - generic [ref=e61]: 
+          - button [ref=e62] [cursor=pointer]:
+            - generic [ref=e63]: 
+          - text: 
+        - button [ref=e65] [cursor=pointer]:
+          - generic [ref=e66]: 
+        - generic [ref=e67]:
+          - button [ref=e68] [cursor=pointer]:
+            - generic [ref=e69]: 
+          - button [ref=e70] [cursor=pointer]:
+            - generic [ref=e71]: 
+    - main [ref=e72]:
+      - button [ref=e73] [cursor=pointer]:
+        - generic [ref=e74]: 
+      - generic [ref=e77]:
+        - generic [ref=e79]:
+          - generic [ref=e82]:
+            - search [ref=e84]:
+              - textbox [ref=e85]:
+                - /placeholder: Search...
+              - generic: 
+            - tree [ref=e88]:
+              - treeitem [level=1] [ref=e89]:
+                - generic [ref=e90] [cursor=pointer]:
+                  - generic:  Light
+              - treeitem [level=1] [ref=e91]:
+                - generic [ref=e92] [cursor=pointer]:
+                  - generic:  Pixel
+              - treeitem [level=1] [ref=e93]:
+                - generic [ref=e94] [cursor=pointer]:
+                  - generic:  Input
+              - treeitem [level=1] [ref=e95]:
+                - generic [ref=e96] [cursor=pointer]:
+                  - generic:  Music
+              - treeitem [level=1] [ref=e97]:
+                - generic [ref=e98] [cursor=pointer]:
+                  - generic:  Loops
+              - treeitem [level=1] [ref=e99]:
+                - generic [ref=e100] [cursor=pointer]:
+                  - generic:  Logic
+              - treeitem [level=1] [ref=e101]:
+                - generic [ref=e102] [cursor=pointer]:
+                  - generic:  Variables
+              - treeitem [level=1] [ref=e103]:
+                - generic [ref=e104] [cursor=pointer]:
+                  - generic:  Math
+              - treeitem [level=1] [ref=e105]:
+                - generic [ref=e106] [cursor=pointer]:
+                  - generic:  Storage
+              - treeitem [level=1] [ref=e107]:
+                - generic [ref=e108] [cursor=pointer]:
+                  - generic:  Extensions
+              - treeitem [level=1] [ref=e110]:
+                - generic [ref=e111] [cursor=pointer]:
+                  - generic:  Advanced
+          - img [ref=e112]:
+            - generic [ref=e115]:
+              - generic [ref=e119]: on start
+              - generic [ref=e123]: forever
+          - img [ref=e124]
+          - img [ref=e127]
+          - img [ref=e130]
+          - img
+          - img
+        - text: 
+      - text:          
+    - region [ref=e131]:
+      - menubar [ref=e132]:
+        - generic [ref=e133]:
+          - menuitem [ref=e134] [cursor=pointer]:
+            - generic [ref=e135]: 
+            - text: Download
+          - menuitem [ref=e136] [cursor=pointer]:
+            - generic [ref=e137]: 
+            - text:   
+        - text:     
+      - generic [ref=e139]:
+        - generic [ref=e140]: Type a name for your project
+        - textbox [ref=e141]:
+          - /placeholder: Pick a name...
+          - text: Test WS2812B
+        - button [ref=e142] [cursor=pointer]:
+          - generic [ref=e143]: 
+        - button [ref=e144] [cursor=pointer]:
+          - generic [ref=e145]: 
+      - menubar [ref=e146]:
+        - generic [ref=e147]:
+          - menuitem [ref=e148] [cursor=pointer]:
+            - generic [ref=e149]: 
+          - menuitem:
+            - generic: 
+        - generic [ref=e150]:
+          - menuitem [ref=e151] [cursor=pointer]:
+            - generic [ref=e152]: 
+          - menuitem [ref=e153] [cursor=pointer]:
+            - generic [ref=e154]: 
+  - dialog [ref=e156]:
+    - generic [ref=e157]: creating new project...
+  - dialog "Boards Help on Boards dialog" [active] [ref=e159]:
+    - generic [ref=e160]:
+      - heading "Boards" [level=3] [ref=e161]
+      - link "Help on Boards dialog" [ref=e163] [cursor=pointer]:
+        - /url: /boards
+        - generic [ref=e164]: 
+    - generic "Extension search results" [ref=e167]:
+      - button "jacdac-brain-f4" [ref=e168]:
+        - generic [ref=e172]:
+          - generic [ref=e173]: jacdac-brain-f4
+          - generic [ref=e174]: MSR Jacdac Brain F4 41
+      - button "jacdac-iot-s2" [ref=e175]:
+        - generic [ref=e179]:
+          - generic [ref=e180]: jacdac-iot-s2
+          - generic [ref=e181]: Support for MSR Jacdac IoT 48 (ESP32-S2)
+      - button "jacdac-brain-rp2040" [ref=e182]:
+        - generic [ref=e186]:
+          - generic [ref=e187]: jacdac-brain-rp2040
+          - generic [ref=e188]: MSR Jacdac Brain RP2040 59
+      - button "jacdac-nrfbrain" [ref=e189]:
+        - generic [ref=e193]:
+          - generic [ref=e194]: jacdac-nrfbrain
+          - generic [ref=e195]: MSR Jacdac NRF52833 High Power 32
+      - button "adafruit-metro-m0-express" [ref=e196]:
+        - generic [ref=e200]:
+          - generic [ref=e201]: adafruit-metro-m0-express
+          - generic [ref=e202]: Support for Adafruit Metro M0 Express
+      - button "sparkfun-redboard-turbo" [ref=e203]:
+        - generic [ref=e207]:
+          - generic [ref=e208]: sparkfun-redboard-turbo
+          - generic [ref=e209]: The SparkFun RedBoard Turbo
+      - button "adafruit-feather-m0-express" [ref=e210] [cursor=pointer]:
+        - generic [ref=e214]:
+          - generic [ref=e215]: adafruit-feather-m0-express
+          - generic [ref=e216]: Support for Adafruit Feather M0 Express
+      - button "adafruit-feather-m4-express" [ref=e217]:
+        - generic [ref=e221]:
+          - generic [ref=e222]: adafruit-feather-m4-express
+          - generic [ref=e223]: Support for Adafruit Feather M4 Express
+      - button "adafruit-gemma-m0" [ref=e224]:
+        - generic [ref=e228]:
+          - generic [ref=e229]: adafruit-gemma-m0
+          - generic [ref=e230]: Support for Adafruit Gemma M0
+      - button "adafruit-grand-central-m4-express" [ref=e231]:
+        - generic [ref=e235]:
+          - generic [ref=e236]: adafruit-grand-central-m4-express
+          - generic [ref=e237]: Support for Adafruit Grand Central M4 Express
+      - button "adafruit-itsybitsy-m0-express" [ref=e238]:
+        - generic [ref=e242]:
+          - generic [ref=e243]: adafruit-itsybitsy-m0-express
+          - generic [ref=e244]: Support for Adafruit ItsyBitsy M0 Express
+      - button "adafruit-itsybitsy-m4-express" [ref=e245]:
+        - generic [ref=e249]:
+          - generic [ref=e250]: adafruit-itsybitsy-m4-express
+          - generic [ref=e251]: Support for Adafruit ItsyBitsy M4 Express
+      - button "adafruit-metro-m4-express" [ref=e252]:
+        - generic [ref=e256]:
+          - generic [ref=e257]: adafruit-metro-m4-express
+          - generic [ref=e258]: Support for Adafruit Metro M4 Express
+      - button "adafruit-trinket-m0" [ref=e259]:
+        - generic [ref=e263]:
+          - generic [ref=e264]: adafruit-trinket-m0
+          - generic [ref=e265]: Support for Adafruit Trinket M0
+      - button "electroniccats-escornabot-makech" [ref=e266]:
+        - generic [ref=e270]:
+          - generic [ref=e271]: electroniccats-escornabot-makech
+          - generic [ref=e272]: Electronic Cats Escornabot Makech
+      - button "electroniccats-meow-meow" [ref=e273]:
+        - generic [ref=e277]:
+          - generic [ref=e278]: electroniccats-meow-meow
+          - generic [ref=e279]: The Electronic Cats Meow Meow board
+      - button "espressif-esp32-devkit-c" [ref=e280]:
+        - generic [ref=e284]:
+          - generic [ref=e285]: espressif-esp32-devkit-c
+          - generic [ref=e286]: Support for Espressif ESP32-DevKitC
+      - button "stitchkit" [ref=e287]:
+        - generic [ref=e291]:
+          - generic [ref=e292]: stitchkit
+          - generic [ref=e293]: Support for StitchKit
+      - button "xinabox-cc03" [ref=e294]:
+        - generic [ref=e298]:
+          - generic [ref=e299]: xinabox-cc03
+          - generic [ref=e300]: Support for XinaBox CC03 - Beta
+      - button "xinabox-cs11" [ref=e301]:
+        - generic [ref=e305]:
+          - generic [ref=e306]: xinabox-cs11
+          - generic [ref=e307]: Support for XinaBox CS11 - Beta
+      - button "adafruit-circuit-playground-bluefruit" [ref=e308]:
+        - generic "adafruit-circuit-playground-bluefruit label" [ref=e310]: Beta
+        - generic [ref=e313]:
+          - generic [ref=e314]: adafruit-circuit-playground-bluefruit
+          - generic [ref=e315]: The Adafruit Circuit Playground Bluefruit library - beta
+      - button "adafruit-circuit-playground-express" [ref=e316]:
+        - generic "adafruit-circuit-playground-express label" [ref=e318]: Beta
+        - generic [ref=e321]:
+          - generic [ref=e322]: adafruit-circuit-playground-express
+          - generic [ref=e323]: The Adafruit Circuit Playground Express library - beta
+      - button "adafruit-feather-nrf52840-express" [ref=e324]:
+        - generic "adafruit-feather-nrf52840-express label" [ref=e326]: Beta
+        - generic [ref=e329]:
+          - generic [ref=e330]: adafruit-feather-nrf52840-express
+          - generic [ref=e331]: Support for Adafruit Feather nrf52840 Express - beta
+      - button "adafruit-itsybitsy-nrf52840-express" [ref=e332]:
+        - generic "adafruit-itsybitsy-nrf52840-express label" [ref=e333]: Beta
+        - generic [ref=e334]:
+          - generic [ref=e335]: adafruit-itsybitsy-nrf52840-express
+          - generic [ref=e336]: Support for Adafruit ItsyBitsy nrf52840 Express - beta
+      - button "adafruit-neotrellis-m4-express" [ref=e337]:
+        - generic "adafruit-neotrellis-m4-express label" [ref=e339]: Beta
+        - generic [ref=e342]:
+          - generic [ref=e343]: adafruit-neotrellis-m4-express
+          - generic [ref=e344]: Support for Adafruit Neotrellis M4 Express - beta
+      - button "arduino-mkr1000" [ref=e345]:
+        - generic "arduino-mkr1000 label" [ref=e347]: Beta
+        - generic [ref=e350]:
+          - generic [ref=e351]: arduino-mkr1000
+          - generic [ref=e352]: Support for Arduino MKR1000 - beta
+      - button "arduino-mkr1010" [ref=e353]:
+        - generic "arduino-mkr1010 label" [ref=e355]: Beta
+        - generic [ref=e358]:
+          - generic [ref=e359]: arduino-mkr1010
+          - generic [ref=e360]: Support for Arduino MKR1010 - beta
+      - button "arduino-mkr1300" [ref=e361]:
+        - generic "arduino-mkr1300 label" [ref=e363]: Beta
+        - generic [ref=e366]:
+          - generic [ref=e367]: arduino-mkr1300
+          - generic [ref=e368]: Support for Arduino MKR1300 - beta
+      - button "arduino-nano-33-ble-sense" [ref=e369]:
+        - generic "arduino-nano-33-ble-sense label" [ref=e371]: Beta
+        - generic [ref=e374]:
+          - generic [ref=e375]: arduino-nano-33-ble-sense
+          - generic [ref=e376]: Support for Arduino 33 BLE Sense - beta
+      - button "arduino-zero" [ref=e377]:
+        - generic "arduino-zero label" [ref=e379]: Beta
+        - generic [ref=e382]:
+          - generic [ref=e383]: arduino-zero
+          - generic [ref=e384]: Support for Arduino Zero - beta
+      - button "brain-nrf52840" [ref=e385]:
+        - generic "brain-nrf52840 label" [ref=e386]: Beta
+        - generic [ref=e387]:
+          - generic [ref=e388]: brain-nrf52840
+          - generic [ref=e389]: Support for JD Brain NRF52840 - beta
+      - button "machachi" [ref=e390]:
+        - generic "machachi label" [ref=e391]: Beta
+        - generic [ref=e392]:
+          - generic [ref=e393]: machachi
+          - generic [ref=e394]: Support for Machachi - beta
+      - button "nucleo-f411re" [ref=e395]:
+        - generic "nucleo-f411re label" [ref=e396]: Beta
+        - generic [ref=e397]:
+          - generic [ref=e398]: nucleo-f411re
+          - generic [ref=e399]: Nucleo F411RE - beta
+      - button "robotics-masters-robohatmm1-m4" [ref=e400]:
+        - generic "robotics-masters-robohatmm1-m4 label" [ref=e402]: Beta
+        - generic [ref=e405]:
+          - generic [ref=e406]: robotics-masters-robohatmm1-m4
+          - generic [ref=e407]: Support for Robotics Masters Robo HAT MM1 M4 - beta
+      - button "rpi-pico" [ref=e408]:
+        - generic "rpi-pico label" [ref=e410]: Beta
+        - generic [ref=e413]:
+          - generic [ref=e414]: rpi-pico
+          - generic [ref=e415]: Support for Raspberry Pi Pico RP2040 - beta
+      - button "sparkfun-lumidrive" [ref=e416]:
+        - generic "sparkfun-lumidrive label" [ref=e418]: Beta
+        - generic [ref=e421]:
+          - generic [ref=e422]: sparkfun-lumidrive
+          - generic [ref=e423]: The SparkFun LumiDrive - beta
+      - button "sparkfun-samd21-dev-breakout" [ref=e424]:
+        - generic "sparkfun-samd21-dev-breakout label" [ref=e426]: Beta
+        - generic [ref=e429]:
+          - generic [ref=e430]: sparkfun-samd21-dev-breakout
+          - generic [ref=e431]: The SparkFun SAMD21 Dev Breakout board - beta
+      - button "sparkfun-samd21-mini-breakout" [ref=e432]:
+        - generic "sparkfun-samd21-mini-breakout label" [ref=e434]: Beta
+        - generic [ref=e437]:
+          - generic [ref=e438]: sparkfun-samd21-mini-breakout
+          - generic [ref=e439]: The SparkFun SAMD21 Mini Breakout board - beta
+```
