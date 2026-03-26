@@ -39,34 +39,34 @@ test('maker load extension in maker.makecode.com and verify blocks', async ({ pa
 
     // Wait for the editor to load (Monaco or Toolbox)
     console.log("Waiting for editor...");
-    await page.waitForSelector('.blocklyToolboxDiv, .monaco-editor', { timeout: 60000 });
+    // The screenshot shows it's actually loaded but maybe the selector is too specific or needs more time/different class
+    // In Maker, it seems to have .blocklyTreeRow
+    await page.waitForSelector('.blocklyTreeRow, .monaco-editor', { timeout: 60000 });
 
     // Open Extensions
     console.log("Opening Extensions...");
-    // Try to find Extensions in the toolbox
-    const extensionsButton = page.locator('.blocklyTreeRow').filter({ hasText: /^Extensions$/ }).first();
-    if (await extensionsButton.isVisible()) {
-        await extensionsButton.click();
-    } else {
-        // Try gear menu if not in toolbox
-        console.log("Extensions not in toolbox, trying settings menu...");
-        const settingsButton = page.locator('#editortools [role="button"]').filter({ has: page.locator('.i.settings') }).first();
-        await settingsButton.click();
-        const extensionsMenuItem = page.locator('div[role="menuitem"]').filter({ hasText: "Extensions" }).first();
-        await extensionsMenuItem.click();
-    }
+    // In Maker, it's often a blocklyTreeRow with text "EXTENSIONS"
+    const extensionsButton = page.locator('.blocklyTreeRow').filter({ hasText: /Extensions/i }).first();
+
+    // Wait for it to be attached and visible
+    await extensionsButton.waitFor({ state: 'visible', timeout: 15000 });
+    await extensionsButton.click();
 
     // Import extension
     console.log("Importing extension...");
-    const searchInput = page.locator('input[placeholder*="Search"], input[type="text"]').first();
+    // Use a more specific selector for the extensions search input
+    const searchInput = page.locator('.extensions-browser input[type="text"]').first();
     await searchInput.waitFor({ state: 'visible' });
+    await searchInput.click();
     await searchInput.fill('https://github.com/chatelao/pxt-ws2812b');
+    await page.waitForTimeout(500);
     await page.keyboard.press('Enter');
 
     // Wait for and click the extension card
     console.log("Waiting for extension card...");
-    const extensionCard = page.locator('.ui.card').filter({ hasText: /pxt-ws2812b/ }).first();
-    await extensionCard.waitFor({ state: 'visible', timeout: 30000 });
+    // Sometimes it takes a while to fetch from GitHub
+    const extensionCard = page.locator('.ui.card, .item').filter({ hasText: /pxt-ws2812b/ }).first();
+    await extensionCard.waitFor({ state: 'visible', timeout: 60000 });
     await extensionCard.click();
 
     // Wait for editor to reload
