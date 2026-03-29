@@ -77,9 +77,9 @@ The upstream repository (`microsoft/pxt-ws2812b`) is tightly coupled to the micr
 **Selection: Variant B (Playwright E2E)**. Essential for verifying that the "Raspberry Pi Pico" target specifically accepts the extension and compiles correctly.
 
 ## Implementation Checklist
-1. [ ] Rename `pin` to `pinId` and change type to `number` in `main.ts`.
-2. [ ] Update `//% shim` to `light::sendWS2812Buffer`.
-3. [ ] Remove `sendBuffer.asm` and `setBufferMode.asm` from `pxt.json`.
-4. [ ] Add `rp2040` to `supportedTargets`.
-5. [ ] Set `"binaryonly": true` in `pxt.json`.
-6. [ ] Add E2E tests in `tests/maker.spec.ts`.
+1. [x] Rename `pin` to `pinId` and change type to `number` in `main.ts`.
+2. [x] Update `//% shim` to `light::sendWS2812Buffer`.
+3. [x] Remove `sendBuffer.asm` and `setBufferMode.asm` from `pxt.json`.
+4. [x] Add `rp2040` to `supportedTargets`.
+5. [x] Set `"binaryonly": true` in `pxt.json`.
+6. [x] Add E2E tests in `tests/maker.spec.ts`.
