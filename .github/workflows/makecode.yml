@@ -9,7 +9,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [12.x]
+        node-version: [18.x]
 
     steps:
       - uses: actions/checkout@v1
@@ -22,6 +22,6 @@ jobs:
           npm install -g makecode
       - name: build
         run: |
-          makecode
+          makecode build
         env:
           CI: true
