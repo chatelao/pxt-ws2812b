@@ -91,8 +91,8 @@ test('maker load extension in maker.makecode.com and verify blocks', async ({ pa
 
     // Inject code
     const code = `
-ws2812b.setBufferMode(DigitalPin.GP0, 1);
-ws2812b.sendBuffer(hex\`ff0000 00ff00 0000ff\`, DigitalPin.GP0);
+ws2812b.setBufferMode(0, 1);
+ws2812b.sendBuffer(hex\`ff0000 00ff00 0000ff\`, 0);
 `;
 
     console.log("Injecting code...");
