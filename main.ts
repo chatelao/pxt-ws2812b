@@ -21,22 +21,22 @@ namespace ws2812b {
      * Sends a color buffer to a light strip
      */
     //% shim=light::sendWS2812Buffer
-    export function sendWS2812Buffer(buf: Buffer, pin: number) {
+    export function sendWS2812Buffer(buf: Buffer, pinId: number) {
     }
 
     /**
      * Sends a color buffer to a light strip
      */
-    //% blockId="ws2812b_send_buffer" block="send buffer %buf on pin %pin" weight=90
-    export function sendBuffer(buf: Buffer, pin: number) {
-        sendWS2812Buffer(buf, pin);
+    //% blockId="ws2812b_send_buffer" block="send buffer %buf on pin %pinId" weight=90
+    export function sendBuffer(buf: Buffer, pinId: number) {
+        sendWS2812Buffer(buf, pinId);
     }
 
     /**
      * Sets the buffer mode
      */
-    //% blockId="ws2812b_set_buffer_mode" block="set buffer mode on pin %pin to %mode" weight=80
-    export function setBufferMode(pin: number, mode: number) {
+    //% blockId="ws2812b_set_buffer_mode" block="set buffer mode on pin %pinId to %mode" weight=80
+    export function setBufferMode(pinId: number, mode: number) {
         _mode = mode;
     }
 
