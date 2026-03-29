@@ -86,7 +86,7 @@ test('maker load extension in maker.makecode.com and verify blocks', async ({ pa
     } catch (e) {}
 
     console.log("Waiting for Monaco...");
-    const monacoEditor = page.locator('.monaco-editor');
+    const monacoEditor = page.locator('div[role="code"].monaco-editor');
     await expect(monacoEditor).toBeVisible({ timeout: 30000 });
 
     // Inject code
