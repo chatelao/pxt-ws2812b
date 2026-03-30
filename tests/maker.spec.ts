@@ -50,8 +50,10 @@ test('maker load extension in maker.makecode.com and verify blocks', async ({ pa
     console.log("Importing extension...");
     const searchInput = page.locator('input[type="text"]').filter({ state: 'visible' }).first();
     await expect(searchInput).toBeVisible();
-    // Use the current repository URL
-    await searchInput.fill('https://github.com/chatelao/pxt-ws2812b');
+    // Use the current repository URL if provided, otherwise default to the repo
+    const extensionUrl = process.env.EXTENSION_URL || 'https://github.com/chatelao/pxt-ws2812b';
+    console.log(`Using extension URL: ${extensionUrl}`);
+    await searchInput.fill(extensionUrl);
     await page.keyboard.press('Enter');
 
     // Wait for results and click the extension card
