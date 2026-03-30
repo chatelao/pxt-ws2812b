@@ -1,11 +1,12 @@
 name: MakeCode
 
-on: [push]
+on: [push, pull_request]
 
 jobs:
   build:
 
     runs-on: ubuntu-latest
+    timeout-minutes: 20
 
     strategy:
       matrix:
@@ -30,6 +31,9 @@ jobs:
           CI: true
       - name: Run Playwright tests
         run: npx playwright test
+        env:
+          # Use the current branch/ref (and handle forks) to test the actual changes in CI
+          EXTENSION_URL: ${{ github.event.pull_request.head.repo.html_url || github.event.repository.html_url }}#${{ github.head_ref || github.ref_name }}
       - uses: actions/upload-artifact@v4
         if: always()
         with:
