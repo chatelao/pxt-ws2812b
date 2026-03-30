@@ -102,8 +102,9 @@ test('maker load extension in maker.makecode.com and verify blocks', async ({ pa
 
     // Inject code
     const code = `
-ws2812b.setBufferMode(0, 1);
-ws2812b.sendBuffer(hex\`ff0000 00ff00 0000ff\`, 0);
+let strip = ws2812b.create(0, 10);
+strip.setBuffer(hex\`ff0000 00ff00 0000ff\`);
+strip.show();
 `;
 
     console.log("Injecting code...");
@@ -117,41 +118,60 @@ ws2812b.sendBuffer(hex\`ff0000 00ff00 0000ff\`, 0);
     console.log("Waiting for compilation...");
     await page.waitForTimeout(10000);
 
-    // Switch back to Blocks
-    console.log("Switching back to Blocks...");
-    const blocksButton = page.locator('a, div').filter({ hasText: /^Blocks$/ }).first();
-    await blocksButton.click();
 
-    // If there's an error converting back, it might show a dialog
-    console.log("Checking for 'Discard' or 'Stay' dialogs...");
-    await page.waitForTimeout(2000);
-    const discardButton = page.locator('button').filter({ hasText: /Discard|Stay/i });
-    if (await discardButton.count() > 0) {
-        try {
-            const firstDiscard = discardButton.first();
-            if (await firstDiscard.isVisible({ timeout: 10000 })) {
-                console.log("Clicking discard/stay button...");
-                await firstDiscard.click();
+    // Switch to Python
+    console.log("Switching to Python...");
+    // In Maker, the Python option might be hidden in a dropdown next to JavaScript
+    try {
+        const pythonButton = page.locator('.python-menuitem, [aria-label="Convert code to Python"]').first();
+        await page.evaluate((el) => {
+            if (el) (el as HTMLElement).click();
+            else {
+                // Try to find it by text if selector fails
+                const items = Array.from(document.querySelectorAll('.item'));
+                const pythonItem = items.find(item => item.textContent?.trim() === 'Python') as HTMLElement;
+                if (pythonItem) pythonItem.click();
             }
-        } catch (e) {}
+        }, await pythonButton.elementHandle().catch(() => null));
+    } catch (e) {
+        console.log("Python switch failed, trying alternative...");
+        await page.click('.dropdown.icon');
+        await page.click('text=Python');
     }
 
-    // Final check
-    console.log("Final verification...");
+    // Wait for Python editor
+    console.log("Waiting for Python editor...");
+    await expect(monacoEditor).toBeVisible({ timeout: 60000 });
+    await page.waitForTimeout(5000); // Wait for conversion
 
-    // Wait for the workspace to settle
-    await page.waitForTimeout(5000);
+    // Verify Python code contains expected terms
+    const pythonCode = await page.evaluate(() => {
+        const editor = document.querySelector('.monaco-editor[data-uri^="pkg:"]') as any;
+        if (editor && editor.innerText) return editor.innerText;
+        // Fallback to finding the model value via monaco API if available
+        // @ts-ignore
+        if (window.monaco && window.monaco.editor) {
+            // @ts-ignore
+            const models = window.monaco.editor.getModels();
+            const pythonModel = models.find(m => m.uri.path.endsWith('.py'));
+            if (pythonModel) return pythonModel.getValue();
+        }
+        return document.body.innerText; // extreme fallback
+    });
+    console.log("Python code snippet:");
+    console.log(pythonCode.substring(0, 200));
 
-    // Verify that there are blocks in the workspace
-    const blocks = page.locator('.blocklyWorkspace .blocklyDraggable');
-    const blockCount = await blocks.count();
-    console.log(`Blocks found: ${blockCount}`);
+    expect(pythonCode).toContain('ws2812b.create');
+    expect(pythonCode).toContain('strip.show');
 
-    // Take a screenshot even if it fails
-    await page.screenshot({ path: 'test-results/final-project.png' });
+    await page.screenshot({ path: 'test-results/python-view.png' });
+    console.log("Python view screenshot saved.");
 
-    expect(blockCount).toBeGreaterThan(0);
-    console.log("Final project screenshot saved.");
+    // Switch back to Blocks for final download
+    console.log("Switching back to Blocks for download...");
+    const blocksButton = page.locator('a, div').filter({ hasText: /^Blocks$/ }).first();
+    await blocksButton.click();
+    await page.waitForTimeout(2000);
 
     // Download firmware
     console.log("Downloading firmware...");

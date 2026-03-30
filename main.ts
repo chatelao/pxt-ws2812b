@@ -47,4 +47,41 @@ namespace ws2812b {
     export const BUFFER_MODE_AP102 = 4
 
     let _mode = BUFFER_MODE_RGB;
+
+    /**
+     * A WS2812B strip
+     */
+    //% fixedInstances
+    export class Strip {
+        buf: Buffer;
+        pinId: number;
+
+        /**
+         * Sends the buffer to the strip
+         */
+        //% blockId="ws2812b_strip_show" block="show %strip" weight=90
+        show() {
+            sendBuffer(this.buf, this.pinId);
+        }
+
+        /**
+         * Sets the buffer
+         */
+        //% blockId="ws2812b_strip_set_buffer" block="set %strip buffer to %buf" weight=80
+        setBuffer(buf: Buffer) {
+            this.buf = buf;
+        }
+    }
+
+    /**
+     * Creates a new WS2812B strip
+     */
+    //% blockId="ws2812b_create" block="create strip on pin %pinId with %numleds leds" weight=100
+    export function create(pinId: number, numleds: number): Strip {
+        let strip = new Strip();
+        let stride = _mode == BUFFER_MODE_RGBW ? 4 : 3;
+        strip.buf = control.createBuffer(numleds * stride);
+        strip.pinId = pinId;
+        return strip;
+    }
 }
