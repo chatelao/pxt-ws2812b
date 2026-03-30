@@ -38,6 +38,8 @@ MIT
 
 * for PXT/microbit
 * for PXT/calliope
+* for PXT/rp2040
+* for PXT/maker
 
 (The metadata above is needed for package search.)
 

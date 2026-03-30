@@ -16,6 +16,7 @@
     "public": true,
     "supportedTargets": [
         "microbit",
+        "calliope",
         "rp2040",
         "maker"
     ],
