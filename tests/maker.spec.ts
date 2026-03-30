@@ -1,15 +1,16 @@
 import { test, expect } from '@playwright/test';
 
 test('maker load extension in maker.makecode.com and verify blocks', async ({ page }) => {
-    test.setTimeout(240000);
+    test.setTimeout(300000); // 5 minutes
 
     console.log("Navigating to maker.makecode.com...");
-    await page.goto('https://maker.makecode.com/?forceRP2040=1', { waitUntil: 'networkidle' });
+    // Force RP2040 and bypass some tutorials/popups if possible
+    await page.goto('https://maker.makecode.com/?forceRP2040=1&nosandbox=1', { waitUntil: 'networkidle' });
 
     // Click "New Project"
     console.log("Clicking New Project...");
     const newProjectCard = page.locator('.newprojectcard, #newproject, .ui.card.clickable').filter({ hasText: /New Project/i }).first();
-    await expect(newProjectCard).toBeVisible({ timeout: 15000 });
+    await expect(newProjectCard).toBeVisible({ timeout: 30000 });
     await page.evaluate((el) => (el as HTMLElement).click(), await newProjectCard.elementHandle());
 
     // Wait for the project name input
@@ -24,8 +25,9 @@ test('maker load extension in maker.makecode.com and verify blocks', async ({ pa
     // Board Selection - Raspberry Pi Pico (if it appears)
     console.log("Checking for Raspberry Pi Pico board selection...");
     try {
+        // Wait a bit for board selection to appear
         const picoBoard = page.locator('.ui.card, .card').filter({ hasText: /Raspberry Pi Pico/i }).first();
-        if (await picoBoard.isVisible({ timeout: 10000 })) {
+        if (await picoBoard.isVisible({ timeout: 15000 })) {
             await picoBoard.click();
             console.log("Selected Raspberry Pi Pico");
         }
@@ -36,18 +38,19 @@ test('maker load extension in maker.makecode.com and verify blocks', async ({ pa
     // Wait for the editor to load
     console.log("Waiting for editor...");
     const blocklyTree = page.locator('.blocklyTreeRoot').first();
-    await expect(blocklyTree).toBeVisible({ timeout: 60000 });
+    await expect(blocklyTree).toBeVisible({ timeout: 90000 });
 
     // Open Extensions
     console.log("Opening Extensions...");
     const extensionsButton = page.locator('.blocklyTreeRow').filter({ hasText: /Extensions/i }).first();
-    await expect(extensionsButton).toBeVisible({ timeout: 15000 });
+    await expect(extensionsButton).toBeVisible({ timeout: 30000 });
     await extensionsButton.click();
 
     // Import extension
     console.log("Importing extension...");
     const searchInput = page.locator('input[type="text"]').filter({ state: 'visible' }).first();
     await expect(searchInput).toBeVisible();
+    // Use the current repository URL
     await searchInput.fill('https://github.com/chatelao/pxt-ws2812b');
     await page.keyboard.press('Enter');
 
@@ -57,14 +60,19 @@ test('maker load extension in maker.makecode.com and verify blocks', async ({ pa
     await expect(extensionTitle).toBeVisible({ timeout: 60000 });
     await extensionTitle.click();
 
-    // Wait for extension to load (look for LIGHT category)
-    console.log("Waiting for LIGHT category...");
-    const lightCategory = page.locator('.blocklyTreeRow').filter({ hasText: /LIGHT/i }).first();
-    await expect(lightCategory).toBeVisible({ timeout: 60000 });
+    // Wait for extension to load (it shows a loading overlay)
+    console.log("Waiting for extension to finish loading...");
+    await page.waitForTimeout(5000); // Give it some time to start loading
+
+    // Wait for the toolbox to update. We expect "WS2812B" or at least "LIGHT"
+    console.log("Waiting for WS2812B or LIGHT category...");
+    const wsCategory = page.locator('.blocklyTreeRow').filter({ hasText: /WS2812B|LIGHT/i }).first();
+    await expect(wsCategory).toBeVisible({ timeout: 90000 });
 
     // Click it to show blocks
-    await lightCategory.click();
-    await page.waitForTimeout(1000);
+    await wsCategory.click();
+    await page.waitForTimeout(2000);
+
     // Assertion: verify blocklyFlyout is visible after clicking the category
     const blocklyFlyout = page.locator('.blocklyFlyout');
     await expect(blocklyFlyout).toBeVisible();
@@ -80,14 +88,15 @@ test('maker load extension in maker.makecode.com and verify blocks', async ({ pa
     // Handle "Problem converting" dialog if it appears
     try {
         const doneButton = page.locator('button').filter({ hasText: /Done|Discard|Stay/i }).first();
-        if (await doneButton.isVisible({ timeout: 5000 })) {
+        if (await doneButton.isVisible({ timeout: 10000 })) {
+            console.log("Handling conversion dialog...");
             await doneButton.click();
         }
     } catch (e) {}
 
     console.log("Waiting for Monaco...");
     const monacoEditor = page.locator('div[role="code"].monaco-editor');
-    await expect(monacoEditor).toBeVisible({ timeout: 30000 });
+    await expect(monacoEditor).toBeVisible({ timeout: 60000 });
 
     // Inject code
     const code = `
@@ -99,10 +108,12 @@ ws2812b.sendBuffer(hex\`ff0000 00ff00 0000ff\`, 0);
     await page.click('.monaco-editor');
     await page.keyboard.press('Control+A');
     await page.keyboard.press('Backspace');
-    await page.keyboard.type(code);
+    // Slow down typing to avoid issues
+    await page.keyboard.type(code, { delay: 50 });
 
     // Wait for compilation/background work
-    await page.waitForTimeout(5000);
+    console.log("Waiting for compilation...");
+    await page.waitForTimeout(10000);
 
     // Switch back to Blocks
     console.log("Switching back to Blocks...");
@@ -111,11 +122,13 @@ ws2812b.sendBuffer(hex\`ff0000 00ff00 0000ff\`, 0);
 
     // If there's an error converting back, it might show a dialog
     console.log("Checking for 'Discard' or 'Stay' dialogs...");
+    await page.waitForTimeout(2000);
     const discardButton = page.locator('button').filter({ hasText: /Discard|Stay/i });
     if (await discardButton.count() > 0) {
         try {
             const firstDiscard = discardButton.first();
-            if (await firstDiscard.isVisible({ timeout: 5000 })) {
+            if (await firstDiscard.isVisible({ timeout: 10000 })) {
+                console.log("Clicking discard/stay button...");
                 await firstDiscard.click();
             }
         } catch (e) {}
@@ -132,10 +145,9 @@ ws2812b.sendBuffer(hex\`ff0000 00ff00 0000ff\`, 0);
     const blockCount = await blocks.count();
     console.log(`Blocks found: ${blockCount}`);
 
-    // Even if they are "hidden" by Playwright's visibility definition (e.g. obscured by a modal),
-    // they should be present in the DOM.
-    expect(blockCount).toBeGreaterThan(0);
-
+    // Take a screenshot even if it fails
     await page.screenshot({ path: 'test-results/final-project.png' });
-    console.log("Final project screenshot saved.");
+
+    expect(blockCount).toBeGreaterThan(0);
+    console.log("Final project screenshot saved. Test passed!");
 });
