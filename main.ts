@@ -1,7 +1,7 @@
 /**
  * WS2812B driver
  */
-//% color="#269a91" icon="\uf0eb" weight=100
+//% color="#269a91" icon="\uf0eb" weight=100 category="WS2812B"
 namespace ws2812b {
     /**
      * Buffer mode for WS2812B
