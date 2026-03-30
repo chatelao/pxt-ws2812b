@@ -151,5 +151,26 @@ ws2812b.sendBuffer(hex\`ff0000 00ff00 0000ff\`, 0);
     await page.screenshot({ path: 'test-results/final-project.png' });
 
     expect(blockCount).toBeGreaterThan(0);
-    console.log("Final project screenshot saved. Test passed!");
+    console.log("Final project screenshot saved.");
+
+    // Download firmware
+    console.log("Downloading firmware...");
+    const downloadPromise = page.waitForEvent('download');
+    const downloadButton = page.locator('.download-button').first();
+    await expect(downloadButton).toBeVisible({ timeout: 30000 });
+    await downloadButton.click();
+
+    const download = await downloadPromise;
+    const downloadPath = 'test-results/firmware.uf2';
+    await download.saveAs(downloadPath);
+    console.log(`Firmware downloaded to ${downloadPath}`);
+
+    // Attach firmware to test report
+    test.info().attachments.push({
+        name: 'firmware',
+        path: downloadPath,
+        contentType: 'application/octet-stream'
+    });
+
+    console.log("Test passed!");
 });
